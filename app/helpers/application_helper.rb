@@ -12,9 +12,13 @@ module ApplicationHelper
   end
   
   
+  
+  
+  # Flash/Alert helpers
+  # ------------------------------------------------------------------------------------------------------
+  
   # a robust method to display flash messages
   def flash_helper keys=[:notice, :alert, :error]
-    puts "keys:: #{keys.inspect}"
     # allow keys to be a symbol or an array of symbols
     keys = [keys] unless keys.kind_of? Array
     
@@ -25,6 +29,13 @@ module ApplicationHelper
     end
     html.html_safe
   end
+  
+  # Simple helper to build alerts
+  def alert_helper text, type=success
+    "#{content_tag(:div, content_tag(:h2, text), :class => "alert alert-#{type}")}".html_safe
+  end
+  
+  
   
   
   # Some simple data and time format helpers

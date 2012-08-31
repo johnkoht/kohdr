@@ -1,37 +1,12 @@
 %section#content.container
   .content
     .row-fluid
-      .span9
-        %h2 My Account
+      .span12
+        %h2 Welcome to the application!
         %hr
-      
         .row-fluid
-          %h3 Facebook
-          %p
-            - if current_user.facebook
-              Facebook successfully connected!
-            - else
-              Not connected
-              %br
-              = link_to "Sign in to Twitter", "/users/auth/facebook", :class => "btn btn-success"
+          = link_to "Sign up", new_user_registration_path, :class => "btn btn-primary"
+          = link_to "Log in", new_user_session_path, :class => "btn"
         
-        .row-fluid
-          %h3 Twitter
-          %p
-            - if current_user.twitter
-              Twitter succesffully connected!
-            - else
-              Not connected
-              %br
-              = link_to "Sign in to Twitter", "/users/auth/twitter"
       
-      
-        .row-fluid
-          %h3 Google
-          %p
-            - if current_user.google
-              Google succesffully connected!
-            - else
-              Not connected
-              %br
-              = link_to "Sign in to Google", "/users/auth/google_oauth2"
+        

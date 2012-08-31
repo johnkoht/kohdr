@@ -8,6 +8,6 @@ Kohdr::Application.routes.draw do
   
   root :to => 'application#index'
   
-  resource :authentications
+  match "dashboard", :to => "authenticated#index"
   
 end
