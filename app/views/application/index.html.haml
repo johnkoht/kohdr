@@ -25,3 +25,9 @@
               %br
               = link_to "Sign in to Twitter", "/users/auth/twitter"
         
+        
+        .row-fluid
+          = icon_link_to "edit facebook", "/path/to/item", "icon-pencil", :class => "btn btn-primary", :method => :post, :'data-type' => :json
+          
+          -#link_to text, path, :remote => true, :method => :post, :'data-type' => :json, :class => classes, :"data-#{m.class.name.underscore.downcase}-id" => m.id
+          

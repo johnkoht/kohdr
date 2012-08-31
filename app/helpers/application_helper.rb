@@ -12,4 +12,33 @@ module ApplicationHelper
   end
   
   
+  # a robust method to display flash messages
+  def flash_helper keys=[:notice, :alert, :error]
+    puts "keys:: #{keys.inspect}"
+    # allow keys to be a symbol or an array of symbols
+    keys = [keys] unless keys.kind_of? Array
+    
+    # html from each message
+    html = ''
+    flash.each do |key, msg|
+      html = html + content_tag(:div, msg, :class => "notification #{key}") if keys.index key
+    end
+    html.html_safe
+  end
+  
+  
+  # Some simple data and time format helpers
+  # ------------------------------------------------------------------------------------------------------
+
+  # Format date 
+  def format_date date
+    date.strftime('%a, %b %-d, %Y')
+  end
+
+  # Format Time
+  def format_time time
+    time.strftime('%I:%M %p')
+  end
+  
+  
 end
