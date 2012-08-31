@@ -10,4 +10,27 @@ Kohdr::Application.routes.draw do
   
   match "dashboard", :to => "authenticated#index"
   
+  
+  
+  # the Admin                                                                   (http://www.domain.com/admin)
+  # ---------------------------------------------------------------------------------------------------------
+  
+  namespace :admin do
+  
+    root :to => "users#index"
+    
+    resources :users do
+      collection do
+        get :admins
+        get :deleted
+      end
+      member do
+        get :delete
+        get :undelete
+      end
+    end
+    
+    
+  end
+  
 end

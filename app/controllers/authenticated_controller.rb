@@ -29,7 +29,6 @@ class AuthenticatedController < ActionController::Base
   
   # After sign in, redirect them to the url they were originally going to
   def after_sign_in_path_for(resource)
-    puts "session:: #{session}"
     session[:user_return_to] || root_path
   end
   

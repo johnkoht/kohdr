@@ -1,10 +1,13 @@
 class User < ActiveRecord::Base
   
+  include SearchSortPaginate
+
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :bio, :timezone
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :bio, :timezone, :admin, :as => :admin
   # if a temporary_password is provided, a random password will be generated
   # this random password will be sent to the welcome email, so we can notify the user of it
   attr_accessor :temporary_password  
@@ -12,7 +15,19 @@ class User < ActiveRecord::Base
   # Associations
   has_many :authentications
   
+  # Scopes
+  default_scope where(deleted_at: nil)
+  scope :admin, where(:admin => true)
+  scope :by_first_name, order('first_name asc')
+  scope :by_last_name, order('last_name asc')
   
+  # if the email address is the DEVELOPER_EMAIL then make them the admin (very useful for the creation of the first user)
+  # Also assign the developer as a super admin in the roles
+  before_validation {|record|
+    if record.email == ENV['DEVELOPER_EMAIL']
+      record.admin = true 
+    end
+  }
   
   
   # User profile helpers
@@ -136,6 +151,20 @@ class User < ActiveRecord::Base
       :email => self.email.to_s,
       :bio => self.bio.to_s
     }
+  end
+  
+  
+  # a DRY approach to searching lists of these models
+  def self.search_fields parent_model=nil
+    case parent_model.class.name.underscore
+    when 'foo'
+    else
+      [
+        { :name => :search, :as => :string, :fields => [:email, :first_name, :last_name], :wildcard => :both },
+        { :name => :created_at, :as => :datetimerange }, 
+        { :name => :admin, :field => :admin, :as => :boolean, :true_label => 'Yes', :false_label => 'No' }, 
+      ]
+    end
   end
   
   
