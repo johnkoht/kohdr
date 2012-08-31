@@ -41,9 +41,14 @@ Kohdr::Application.configure do
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
+  if ENV['MEMCACHE_SERVERS']
+    config.cache_store = :dalli_store, ENV['MEMCACHE_SERVERS'], { :namespace => ENV['APP_NAME'], :expires_in => 24.hours, :compress => true }
+  end
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
-  # config.action_controller.asset_host = "http://assets.example.com"
+  if ENV['S3_CLOUDFRONT_DOMAIN']
+    config.action_controller.asset_host = "//#{ENV['S3_CLOUDFRONT_DOMAIN']}"
+  end
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
@@ -64,4 +69,5 @@ Kohdr::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+  
 end
