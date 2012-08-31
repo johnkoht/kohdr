@@ -1,0 +1,31 @@
+hi!
+
+%h3 Facebook
+%p= current_user.facebook ? "Facebook successfully connected!" : "Not connected"
+  
+%hr
+
+%h3 Twitter
+%p
+  - if current_user.twitter
+    Twitter succesffully connected!
+  - else
+    Not connected
+    %br
+    = link_to "Sign in to Twitter", "/users/auth/twitter"
+		
+    
+    
+    
+    / - if devise_mapping.omniauthable?
+    /   - resource_class.omniauth_providers.each do |provider|
+    /     = link_to "Sign in with #{provider.to_s.titleize}", omniauth_authorize_path(resource_name, provider)
+    /     %br/
+    / 
+
+= current_user.authentications
+
+-#<% if @user.authentications.select{ |i| i.provider == 'facebook' }.empty? %>
+
+
+= link_to "Logout", destroy_user_session_path, :method => :delete
