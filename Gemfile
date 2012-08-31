@@ -6,10 +6,11 @@ gem 'mysql2', '0.3.11'
 gem 'foreigner', '1.1.6'
 gem 'faraday', :git => 'git://github.com/technoweenie/faraday.git'
 
-# Devise for Authentication
+# Authentication and OAuth
 gem 'devise', '2.0.4'
 gem "omniauth-facebook", '1.3.0'
 gem "omniauth-twitter", '0.0.7'
+gem 'omniauth-google-oauth2'
 gem 'fb_graph'
 
 # Front-end

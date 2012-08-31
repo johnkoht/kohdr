@@ -1,12 +1,16 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 
-require "omniauth-facebook"
+# OAuth plugin requirements
+require "omniauth-facebook" if FACEBOOK_CLIENT_ID and FACEBOOK_SECRET
+require "omniauth-google-oauth2" if GOOGLE_APP_ID and GOOGLE_APP_SECRET
 
 Devise.setup do |config|
   
-  config.omniauth :facebook, FACEBOOK_CLIENT_ID, FACEBOOK_SECRET, { :scope => 'email, read_stream, publish_stream' }  
-  config.omniauth :twitter, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
+  # Setup OAuth configuration for devise
+  config.omniauth :facebook, FACEBOOK_CLIENT_ID, FACEBOOK_SECRET, { :scope => 'email, read_stream, publish_stream' } if FACEBOOK_CLIENT_ID and FACEBOOK_SECRET
+  config.omniauth :twitter, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET if TWITTER_CONSUMER_KEY and TWITTER_CONSUMER_SECRET
+  config.omniauth :google_oauth2, GOOGLE_APP_ID, GOOGLE_APP_SECRET, { access_type: "offline", approval_prompt: "" } if GOOGLE_APP_ID and GOOGLE_APP_SECRET
   
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,

@@ -15,15 +15,36 @@ class User < ActiveRecord::Base
   
   
   
+  # User profile helpers
+  # ----------------------------------------------------------------------------------------------------
+  
+  # Get a user's full name
+  def full_name
+    "#{self.first_name.capitalize} #{self.last_name.capitalize}"
+  end
+  
+  # Return the abbreviated name, e.g. John K.
+  def abbreviated_name
+    "#{self.first_name.capitalize} #{self.last_name.first.capitalize}."
+  end
+  
+  
+  
+  
   # OAUTH Helpers
   # ----------------------------------------------------------------------------------------------------
   
+  # Get Facebook authentication for user
   def facebook
     self.authentications.find_by_user_id_and_provider(self.id, "facebook")
   end
-  
+  # Get Twitter authentication for user
   def twitter
     self.authentications.find_by_user_id_and_provider(self.id, "twitter")
+  end
+  # Get Google authentication for user
+  def google
+    self.authentications.find_by_user_id_and_provider(self.id, "google_oauth2")
   end
   
   # OAUTH Helper: Check if a authentication and/or user exists or create them
@@ -31,12 +52,13 @@ class User < ActiveRecord::Base
     puts "============================================================================"
     puts "data:: #{data}"
     puts "provider:: #{data.provider}"
+    #puts "provider:: #{data.extra.raw_info.email}"
     puts "============================================================================"
     # Facebook returns all of the profile information within extra.raw_info, let's
     # store all of that in a profile variable
     profile = data.extra.raw_info    
     # Let check if an authentication record exist based on the uid and provider
-    authentication = Authentication.where(:uid => data.uid, :provider => data.provider).first
+    authentication = Authentication.where(uid: data.uid, provider: data.provider).first
     user_from_authentication = authentication ? authentication.user : nil
     # Let's find the user based on the signed_in_resource (current session); if that doesn't
     # work let's check the user_from_authentication; if still nothing, let's find a user based
@@ -50,7 +72,11 @@ class User < ActiveRecord::Base
       else
         # If a use rexists but has no authentication, let's create an authentication record
         # and return it
-        user.authentications.create!(:uid => data.uid, :provider => data.provider, :token => data.credentials.token, :token_secret => data.credentials.secret)
+        user.authentications.create!(uid: data.uid,
+          provider: data.provider, 
+          token: data.credentials.token,
+          token_secret: data.credentials.secret,
+        )
         user
       end
     else
@@ -74,16 +100,43 @@ class User < ActiveRecord::Base
         timezone = timezone  / 60 / 60
       when "facebook"
         timezone = profile.timezone.to_i
+      when "google_oauth2"
+        timezone = nil
       end
       # Now let's create the user object, the image, authentication and save them all up!
-      user = User.create!(:email => profile.email, :first_name => profile.first_name, :timezone => timezone, :last_name => profile.last_name, :password => Devise.friendly_token[0,20]) 
+      user = User.create!(email: profile.email,
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        timezone: timezone,
+        password: Devise.friendly_token[0,20]
+      )
       #user.image = Image.create(:url => profile.image, :carrierwave => false)
-      user.authentications.create!(:uid => data.uid, :provider => data.provider, :token => data.credentials.token)
+      user.authentications.create!(uid: data.uid,
+        provider: data.provider, 
+        token: data.credentials.token,
+        token_secret: data.credentials.secret,
+      )
       user.save()
       user
     end
   end
-
+  
+  
+  
+  
+  # API Attributes and helpers
+  # ----------------------------------------------------------------------------------------------------
+  
+  # API Attributes for a user
+  def api_attributes
+    {
+      :id => self.id.to_s,
+      :first_name => self.first_name.to_s,
+      :last_name => self.last_name.to_s,
+      :email => self.email.to_s,
+      :bio => self.bio.to_s
+    }
+  end
   
   
 end
