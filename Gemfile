@@ -17,6 +17,7 @@ gem 'haml', '3.1.5'
 gem 'haml-rails', '0.3.4'
 gem 'sass', '3.1.17'
 gem 'jquery-rails', '2.0.2'
+gem "hsc-twitter-bootstrap-rails"
 
 # CMS
 gem 'json_output_helper', '0.1.0'
@@ -51,6 +52,7 @@ end
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'uglifier', '>= 1.0.3'
+  gem 'coffee-rails', '3.2.1'
 end
 
 

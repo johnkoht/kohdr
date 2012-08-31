@@ -55,5 +55,9 @@ module Kohdr
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    
+    # Set SCSS as default sass syntax for a gem
+    config.sass.preferred_syntax = :scss
+    
   end
 end

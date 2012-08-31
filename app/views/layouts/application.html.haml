@@ -1,0 +1,14 @@
+!!! 5
+- conditional_html 'en' do
+
+  %head= render "layouts/scaffold/head"
+
+  %body
+  
+    // Main layout, navigation and structure
+    = render "layouts/scaffold/header"
+          
+    = yield
+
+    // Footer
+    = render "layouts/scaffold/footer"
