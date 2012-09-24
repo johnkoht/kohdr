@@ -61,12 +61,24 @@ class User < ActiveRecord::Base
   def google
     self.authentications.find_by_user_id_and_provider(self.id, "google_oauth2")
   end
+  # Get Tumblr authentication for user
+  def tumblr
+    self.authentications.find_by_user_id_and_provider(self.id, "tumblr")
+  end
+  # Get Foursquare authentication for user
+  def foursquare
+    self.authentications.find_by_user_id_and_provider(self.id, "foursquare")
+  end
   
   # OAUTH Helper: Check if a authentication and/or user exists or create them
   def self.find_or_create_for_oauth data, signed_in_resource=nil
     puts "============================================================================"
-    puts "data:: #{data}"
-    puts "provider:: #{data.provider}"
+    #puts "data:: #{data}"
+    #puts "provider:: #{data.provider}"
+    #puts "profile:: #{data.extra.raw_info.inspect}"
+    puts "profile:: #{data.extra.raw_info.contact}"
+    puts "profile:: #{data.extra.raw_info.firstName}"
+    puts "profile:: #{data.extra.raw_info.lastName}"
     #puts "provider:: #{data.extra.raw_info.email}"
     puts "============================================================================"
     # Facebook returns all of the profile information within extra.raw_info, let's
@@ -117,6 +129,12 @@ class User < ActiveRecord::Base
         timezone = profile.timezone.to_i
       when "google_oauth2"
         timezone = nil
+      when "tumblr"
+        profile.email = "#{profile.name.underscore}@grazr.com"
+      when "foursquare"
+        profile.first_name = profile.firstName
+        profile.last_name = profile.lastName
+        profile.email = profile.contact.email
       end
       # Now let's create the user object, the image, authentication and save them all up!
       user = User.create!(email: profile.email,
@@ -135,7 +153,6 @@ class User < ActiveRecord::Base
       user
     end
   end
-  
   
   
   

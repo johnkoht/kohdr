@@ -4,6 +4,8 @@
 # OAuth plugin requirements
 require "omniauth-facebook" if FACEBOOK_CLIENT_ID and FACEBOOK_SECRET
 require "omniauth-google-oauth2" if GOOGLE_APP_ID and GOOGLE_APP_SECRET
+require "omniauth-tumblr" if TUMBLR_CONSUMER_KEY and TUMBLR_SECRET_KEY
+require "omniauth-foursquare" if FOURSQUARE_CONSUMER_KEY and FOURSQUARE_CONSUMER_SECRET
 
 Devise.setup do |config|
   
@@ -11,6 +13,9 @@ Devise.setup do |config|
   config.omniauth :facebook, FACEBOOK_CLIENT_ID, FACEBOOK_SECRET, { :scope => 'email, read_stream, publish_stream' } if FACEBOOK_CLIENT_ID and FACEBOOK_SECRET
   config.omniauth :twitter, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET if TWITTER_CONSUMER_KEY and TWITTER_CONSUMER_SECRET
   config.omniauth :google_oauth2, GOOGLE_APP_ID, GOOGLE_APP_SECRET, { access_type: "offline", approval_prompt: "" } if GOOGLE_APP_ID and GOOGLE_APP_SECRET
+  config.omniauth :tumblr, TUMBLR_CONSUMER_KEY, TUMBLR_SECRET_KEY if TUMBLR_CONSUMER_KEY and TUMBLR_SECRET_KEY
+  config.omniauth :foursquare, FOURSQUARE_CONSUMER_KEY, FOURSQUARE_CONSUMER_SECRET if FOURSQUARE_CONSUMER_KEY and FOURSQUARE_CONSUMER_SECRET
+  
   
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,

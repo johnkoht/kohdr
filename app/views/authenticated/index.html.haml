@@ -35,3 +35,26 @@
               Not connected
               %br
               = link_to "Sign in to Google", "/users/auth/google_oauth2"
+        
+        
+        .row-fluid
+          %h3 Tumblr
+          %p
+            - if current_user.tumblr
+              Tumblr succesffully connected!
+            - else
+              Not connected
+              %br
+              = link_to "Sign in to Tumblr", "/users/auth/tumblr"
+      
+      
+        .row-fluid
+          %h3 Foursquare
+          %p
+            - if current_user.foursquare
+              Foursquare succesffully connected!
+            - else
+              Not connected
+              %br
+              = link_to "Sign in to Foursquare", "/users/auth/foursquare"
+      

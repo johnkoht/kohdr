@@ -11,7 +11,12 @@ gem 'devise', '2.0.4'
 gem "omniauth-facebook", '1.3.0'
 gem "omniauth-twitter", '0.0.7'
 gem 'omniauth-google-oauth2'
+gem 'omniauth-tumblr'
+gem 'omniauth-foursquare'
+
+# Social API gems
 gem 'fb_graph'
+
 
 # CMS
 gem 'json_output_helper', '0.1.0'
