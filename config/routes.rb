@@ -5,10 +5,11 @@ Kohdr::Application.routes.draw do
      get "logout" => "devise/sessions#destroy"
   end  
   
+  match "dashboard", :to => "authenticated#index"
+  
+  
   
   root :to => 'application#index'
-  
-  match "dashboard", :to => "authenticated#index"
   
   
   
