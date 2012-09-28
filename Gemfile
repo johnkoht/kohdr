@@ -13,6 +13,7 @@ gem "omniauth-twitter", '0.0.7'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-tumblr'
 gem 'omniauth-foursquare'
+gem 'omniauth-github'
 
 # Social API gems
 gem 'fb_graph'

@@ -4,21 +4,21 @@
       .span9
         %h2 My Account
         %hr
-      
+              
         .row-fluid
           %h3 Facebook
           %p
-            - if current_user.facebook
+            - if current_user.is_connected_to "facebook"
               Facebook successfully connected!
             - else
               Not connected
               %br
-              = link_to "Sign in to Twitter", "/users/auth/facebook", :class => "btn btn-success"
+              = link_to "Sign in to Twitter", "/users/auth/facebook"
         
         .row-fluid
           %h3 Twitter
           %p
-            - if current_user.twitter
+            - if current_user.is_connected_to "twitter"
               Twitter succesffully connected!
             - else
               Not connected
@@ -29,7 +29,7 @@
         .row-fluid
           %h3 Google
           %p
-            - if current_user.google
+            - if current_user.is_connected_to "google_oauth2"
               Google succesffully connected!
             - else
               Not connected
@@ -40,7 +40,7 @@
         .row-fluid
           %h3 Tumblr
           %p
-            - if current_user.tumblr
+            - if current_user.is_connected_to "tumblr"
               Tumblr succesffully connected!
             - else
               Not connected
@@ -51,10 +51,21 @@
         .row-fluid
           %h3 Foursquare
           %p
-            - if current_user.foursquare
-              Foursquare succesffully connected!
+            - if current_user.is_connected_to "foursquare"
+              Foursquare succesfully connected!
             - else
               Not connected
               %br
               = link_to "Sign in to Foursquare", "/users/auth/foursquare"
       
+        
+        .row-fluid
+          %h3 Github
+          %p
+            - if current_user.is_connected_to "github"
+              Github succesffully connected!
+            - else
+              Not connected
+              %br
+              = link_to "Sign in to Github", "/users/auth/github"
+        

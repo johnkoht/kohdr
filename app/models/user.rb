@@ -2,8 +2,10 @@ class User < ActiveRecord::Base
   
   include SearchSortPaginate
 
-  # Include default devise modules. Others available are:
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+  # Include default devise modules.
+  # NOTE: validatable is not included so that all of the OAuth providers work without 
+  # requiring an email. Feel free to change.
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :omniauthable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :bio, :timezone
@@ -49,39 +51,27 @@ class User < ActiveRecord::Base
   # OAUTH Helpers
   # ----------------------------------------------------------------------------------------------------
   
-  # Get Facebook authentication for user
-  def facebook
-    self.authentications.find_by_user_id_and_provider(self.id, "facebook")
+  # Check if the user is connected to a specific provider
+  # e.g. "twitter", "facebook", "google_oauth2", "tumblr", etc.
+  def is_connected_to provider
+    # Check to see if an authentication exists and return it if so
+    self.authentications.find_by_user_id_and_provider(self.id, provider.downcase)
   end
-  # Get Twitter authentication for user
-  def twitter
-    self.authentications.find_by_user_id_and_provider(self.id, "twitter")
-  end
-  # Get Google authentication for user
-  def google
-    self.authentications.find_by_user_id_and_provider(self.id, "google_oauth2")
-  end
-  # Get Tumblr authentication for user
-  def tumblr
-    self.authentications.find_by_user_id_and_provider(self.id, "tumblr")
-  end
-  # Get Foursquare authentication for user
-  def foursquare
-    self.authentications.find_by_user_id_and_provider(self.id, "foursquare")
-  end
-  
+    
   # OAUTH Helper: Check if a authentication and/or user exists or create them
   def self.find_or_create_for_oauth data, signed_in_resource=nil
     puts "============================================================================"
     #puts "data:: #{data}"
     #puts "provider:: #{data.provider}"
     puts "credentials:: #{data.credentials}"
-    #puts "profile:: #{data.extra.raw_info.inspect}"
+    puts "profile:: #{data.extra.raw_info.inspect}"
     #puts "profile:: #{data.extra.raw_info.contact}"
     #puts "profile:: #{data.extra.raw_info.firstName}"
     #puts "profile:: #{data.extra.raw_info.lastName}"
     #puts "provider:: #{data.extra.raw_info.email}"
     puts "============================================================================"
+    #return false
+    
     # Facebook returns all of the profile information within extra.raw_info, let's
     # store all of that in a profile variable
     profile = data.extra.raw_info    
@@ -108,40 +98,12 @@ class User < ActiveRecord::Base
         user
       end
     else
-      # If a user does not exist than let's create an authentication and user
-      case data.provider.downcase
-      when "twitter"
-        # If the user is using Twitter
-        # Twitter users only have one field for name, let's try to hack something together
-        nameparts = profile.name.split(" ")
-        if nameparts.count > 1
-          profile.first_name = nameparts.first
-          profile.last_name = nameparts.last
-        else
-          profile.first_name = profile.name
-          profile.last_name = ''
-        end
-        # Twitter does not provide an email, let's make one up
-        profile.email = "#{profile.screen_name}@grazr.com"
-        # Timezone
-        timezone = profile.utc_offset.to_i
-        timezone = timezone  / 60 / 60
-      when "facebook"
-        timezone = profile.timezone.to_i
-      when "google_oauth2"
-        timezone = nil
-      when "tumblr"
-        profile.email = "#{profile.name.underscore}@grazr.com"
-      when "foursquare"
-        profile.first_name = profile.firstName
-        profile.last_name = profile.lastName
-        profile.email = profile.contact.email
-      end
+      oauth_profile_details data, profile
       # Now let's create the user object, the image, authentication and save them all up!
       user = User.create!(email: profile.email,
         first_name: profile.first_name,
         last_name: profile.last_name,
-        timezone: timezone,
+        timezone: profile.timezone,
         password: Devise.friendly_token[0,20]
       )
       #user.image = Image.create(:url => profile.image, :carrierwave => false)
@@ -156,7 +118,58 @@ class User < ActiveRecord::Base
   end
   
   
+  def self.oauth_profile_details data, profile
+    
+    # If a user does not exist than let's create an authentication and user
+    case data.provider.downcase
+      
+      when "twitter"
+        # If the user is using Twitter
+        # Twitter users only have one field for name, let's try to hack something together
+        nameparts = profile.name.split(" ")
+        if nameparts.count > 1
+          profile.first_name = nameparts.first
+          profile.last_name = nameparts.last
+        else
+          profile.first_name = profile.name
+          profile.last_name = ''
+        end
+        # Twitter does not provide an email, let's make one up
+        #profile.email = "#{profile.screen_name}@#{BASE_DOMAIN_NAME}"
+        # Timezone
+        profile.timezone = profile.utc_offset.to_i
+        profile.timezone = profile.timezone  / 60 / 60
+      when "facebook"
+        profile.timezone = profile.timezone.to_i
+      when "google_oauth2"
+        profile.first_name = profile.given_name
+        profile.last_name = profile.family_name
+        profile.timezone = nil
+      when "tumblr"
+        #profile.email = "#{profile.name.underscore}@#{BASE_DOMAIN_NAME}"
+        profile.timezone = nil
+      when "foursquare"
+        profile.first_name = profile.firstName
+        profile.last_name = profile.lastName
+        profile.email = profile.contact.email
+        profile.timezone = nil
+      when 'github'
+        #profile.email = profile.email || "#{profile.name.underscore}@#{BASE_DOMAIN_NAME}"
+        nameparts = profile.name.split(" ")
+        if nameparts.count > 1
+          profile.first_name = nameparts.first
+          profile.last_name = nameparts.last
+        else
+          profile.first_name = profile.name
+          profile.last_name = ''
+        end
+        profile.timezone = nil
+    end
+    # Return the updated profile
+    return profile
+  end
   
+    
   # API Attributes and helpers
   # ----------------------------------------------------------------------------------------------------
   
