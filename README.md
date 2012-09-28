@@ -98,3 +98,8 @@ There are a few additional gems I added that are really useful.
 4. [Faraday](https://github.com/technoweenie/faraday) (HTTP client library)
 5. [Kaminari](https://github.com/amatsuda/kaminari) (Pagination)
 6. [geocoder](https://github.com/alexreisner/geocoder) (Ruby geocoding solution)
+
+
+## License
+
+[MIT License](http://www.opensource.org/licenses/MIT). Copyright 2012 [kohactive](http://www.kohactive.com)
