@@ -37,7 +37,7 @@ Create your database:
 
 Run the migrations:
 
-  `rake db:migrate``
+  `rake db:migrate`
 
 
 ### Step 4. Start building
