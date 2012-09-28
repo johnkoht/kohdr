@@ -1,4 +1,5 @@
 AssetSync.configure do |config|
+  
   config.fog_provider = 'AWS'
   config.aws_access_key_id = AWS_ACCESS_KEY_ID
   config.aws_secret_access_key = AWS_SECRET_ACCESS_KEY

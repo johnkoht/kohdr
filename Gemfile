@@ -40,8 +40,6 @@ gem 'geocoder', '1.1.2'
 # Development mode
 group :development do
   gem 'capistrano', '2.12.0'
-  gem 'hpricot', '0.8.6'
-  gem 'ruby_parser', '2.3.1'
   gem 'thin', '1.3.1'
   gem "bullet"
 end
