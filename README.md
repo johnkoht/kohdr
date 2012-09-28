@@ -33,11 +33,11 @@ The rvmrc file sets up your environment variables, including app name, email, AP
 
 Create your database:
 
-  rake db:create
+  `rake db:create`
 
 Run the migrations:
 
-  rake db:migrate
+  `rake db:migrate``
 
 
 ### Step 4. Start building
