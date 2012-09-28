@@ -11,6 +11,40 @@ default:
 5. RVMRC file
 
 
+## Step 1. Getting Started
+
+Getting started is quick and easy. You should be up and running within a few minutes. 
+
+### Step 2. Clone the repo
+
+This should be pretty self evident.
+
+### Step 3. Setup your rvmrc.
+
+The rvmrc file sets up your environment variables, including app name, email, API credentials, AWS, etc. It's pretty simple to set up.
+
+1. Create a new file called .rvmrc
+2. Copy the rvmrc.txt content into the .rvmrc file
+3. Fill in the details
+4. Save your changes.
+5. In terminal, cd out of the directory and back in to apply those changes.
+
+### Step 4. Setup your databases
+
+Create your database:
+
+  rake db:create
+
+Run the migrations:
+
+  rake db:migrate
+
+
+### Step 5. Start building
+
+Once you've set up your rvmrc and database you should be ready to go. Start your rails server and navigation to localhost:3000/users/sign_up to create an account.
+
+
 ## OAuth
 
 Omniauth comes baked in with a bunch of providers. Feel free to add your own. 
