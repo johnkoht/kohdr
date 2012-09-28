@@ -11,15 +11,15 @@ default:
 5. RVMRC file
 
 
-## Step 1. Getting Started
+## Getting Started
 
 Getting started is quick and easy. You should be up and running within a few minutes. 
 
-### Step 2. Clone the repo
+### Step 1. Clone the repo
 
 This should be pretty self evident.
 
-### Step 3. Setup your rvmrc.
+### Step 2. Setup your rvmrc.
 
 The rvmrc file sets up your environment variables, including app name, email, API credentials, AWS, etc. It's pretty simple to set up.
 
@@ -29,7 +29,7 @@ The rvmrc file sets up your environment variables, including app name, email, AP
 4. Save your changes.
 5. In terminal, cd out of the directory and back in to apply those changes.
 
-### Step 4. Setup your databases
+### Step 3. Setup your databases
 
 Create your database:
 
@@ -40,9 +40,9 @@ Run the migrations:
   rake db:migrate
 
 
-### Step 5. Start building
+### Step 4. Start building
 
-Once you've set up your rvmrc and database you should be ready to go. Start your rails server and navigation to localhost:3000/users/sign_up to create an account.
+Profit. Once you've set up your rvmrc and database you should be ready to go. Start your rails server and navigation to localhost:3000/users/sign_up to create an account.
 
 
 ## OAuth
